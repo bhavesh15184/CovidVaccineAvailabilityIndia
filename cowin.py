@@ -3,6 +3,7 @@ import json
 import datetime
 import csv
 from requests.exceptions import HTTPError
+from SlotDetails import SlotDetails
 
 # ///////////////      CONFIGURATIONS     //////////////////////////////////
 OUTPUT_FILE = 'availibility.csv'
@@ -13,37 +14,37 @@ DAYS_TO_CHECK = 7
 AGE = 37
 # //////////////////////////////////////////////////////////////////////////
 
-def getAvailibilityForRangePinCodes():
+def getAvailibility(days, age, input):
+    getAvailibilityForRangePinCodes(days, age, input)
 
-    with open(INPUT_PINCODE_FILE, mode='r') as csv_file:
+def getPinCodes(input_file):
+    pincodes = []
+    with open(input_file, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
-        slots = []
         for row in csv_reader:
-            getAvailibilityForPincode(row["Pincode"], slots)
+            pincodes.append(row["Pincode"])
 
-        writeSlotsToCSV(slots)
+    return pincodes
 
-class SlotDetails:  
-    def __init__ (self, pincode, date, center, block, fee_type, available_capacity, vaccine):  
-         self.pincode   = pincode
-         self.date   = date  
-         self.center    = center  
-         self.block = block 
-         self.fee_type = fee_type  
-         self.available_capacity = available_capacity 
-         self.vaccine = vaccine 
+def getAvailibilityForRangePinCodes(days_to_check, age, pincodes):
+    slots = []
+    for code in pincodes:
+        getAvailibilityForPincode(code, days_to_check, age, slots)
 
-def getAvailibilityForPincode(PIN_CODE, slots):
-    print("Checking for PIN_CODE: ", PIN_CODE, "...")
+    return slots
+
+
+def getAvailibilityForPincode(pin_code, days_to_check, age, slots):
+    print("Checking for PIN_CODE: ", pin_code, "...")
 
     today = datetime.datetime.today()
-    day_list = [today + datetime.timedelta(days=x) for x in range(DAYS_TO_CHECK)]
+    day_list = [today + datetime.timedelta(days=x) for x in range(days_to_check)]
     date = [x.strftime("%d-%m-%Y") for x in day_list]
 
     number_of_available = 0
 
     for current_date in date:
-        url = BASE_URL.format(PIN_CODE, current_date)
+        url = BASE_URL.format(pin_code, current_date)
         response = requests.get(url)
 
         if response.ok:
@@ -52,10 +53,10 @@ def getAvailibilityForPincode(PIN_CODE, slots):
             if json_response["centers"]:
                     for center in json_response["centers"]:
                         for session in center["sessions"]:
-                            if session["min_age_limit"] <= AGE:
+                            if session["min_age_limit"] <= age:
 
                                 if int(session["available_capacity"]) > 0:
-                                    s = SlotDetails(PIN_CODE,
+                                    s = SlotDetails(pin_code,
                                                     current_date, 
                                                     center["name"], 
                                                     center["block_name"],
@@ -68,11 +69,11 @@ def getAvailibilityForPincode(PIN_CODE, slots):
                                     number_of_available = number_of_available + 1
     
     if number_of_available > 0:
-        print("AVAILABLE SLOTS FOR PIN_CODE ",PIN_CODE," ARE: ",number_of_available)
+        print("AVAILABLE SLOTS FOR PIN_CODE ",pin_code," ARE: ",number_of_available)
 
     
-def writeSlotsToCSV(slots):
-    with open(OUTPUT_FILE, 'w',) as csvfile:
+def writeSlotsToCSV(slots, output_file):
+    with open(output_file, 'w',) as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Pincode', 'Date', 'Center', 'Block','Fee Type','Capacity','Vaccine'])
 
@@ -80,4 +81,6 @@ def writeSlotsToCSV(slots):
             writer.writerow([s.pincode, s.date, s.center, s.block, s.fee_type, s.available_capacity, s.vaccine])
 
 if __name__ == '__main__':
-    getAvailibilityForRangePinCodes()
+    pincodes = getPinCodes(INPUT_PINCODE_FILE)
+    slots = getAvailibilityForRangePinCodes(DAYS_TO_CHECK, AGE, pincodes)
+    writeSlotsToCSV(slots, OUTPUT_FILE)
