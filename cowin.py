@@ -14,9 +14,6 @@ DAYS_TO_CHECK = 7
 AGE = 37
 # //////////////////////////////////////////////////////////////////////////
 
-def getAvailibility(days, age, input):
-    getAvailibilityForRangePinCodes(days, age, input)
-
 def getPinCodes(input_file):
     pincodes = []
     with open(input_file, mode='r') as csv_file:

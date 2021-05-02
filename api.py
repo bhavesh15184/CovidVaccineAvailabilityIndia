@@ -1,5 +1,4 @@
 import flask
-import jsonify
 import json
 import prettytable
 from prettytable import from_csv
