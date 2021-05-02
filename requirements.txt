@@ -1,0 +1,5 @@
+json
+flask
+prettytable
+requests
+
