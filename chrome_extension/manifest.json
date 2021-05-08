@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2, 
+    "version": "1.0", 
+    "name": "Find covid vaccine available slots", 
+    "description": "",
+    "permissions": ["tabs", "<all_urls>"], 
+    "icons":
+    {
+        "16": "images/puppy16.png", 
+        "48": "images/puppy48.png",
+        "128": "images/puppy128.png"
+    },
+    "browser_action":
+    {
+        "default_icon": "images/puppy16.png",
+        "default_popup": "popup.html"
+    },
+    "web_accessible_resources": [
+        "beep.mp3"
+    ]
+}
