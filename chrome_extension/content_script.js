@@ -12,10 +12,23 @@
 
 var slots_found = false;
 
-function click18_button(){
-    var buttons18 = document.getElementsByClassName("form-check-label");
-    buttons18[0].click();
-    console.log("18+ button clicked at " + new Date().toLocaleString().replace(',',''));
+function click18_button(){    
+    var aTags = document.getElementsByTagName("label");
+    var searchText = "Age 18+";
+    var found = false;
+    for (var i = 0; i < aTags.length; i++) {
+        if (aTags[i].textContent == searchText) {
+            aTags[i].click();
+            console.log("18+ button clicked at " + new Date().toLocaleString().replace(',',''));
+            found = true;
+            break;
+        }
+    }
+    if(found === false){
+        var buttons18 = document.getElementsByClassName("form-check-label");
+        buttons18[0].click();
+        console.log("18+ button clicked at " + new Date().toLocaleString().replace(',',''));
+    }        
 }
 
 function getRowCount(){
@@ -57,11 +70,11 @@ function findSlotAvailableButtonRecursive() {
         var buttons = document.getElementsByClassName("pin-search-btn");
         buttons[0].click();
         console.log(max + ' : Search button clicked at ' + new Date().toLocaleString().replace(',',''));  
-        sleep(3000);
+        sleep(5000);
         click18_button(); 
         // setTimeout(function(){ click18_button(); }, 3000);
 
-        sleep(500);
+        sleep(1000);
         getRowCount();
         // setTimeout(function(){ getRowCount(); }, 500);
         if(slots_found === true){
@@ -104,11 +117,31 @@ function selectStateAndDistrict(){
     
     document.querySelectorAll('.mat-select')[1].focus();
 
-    var ev = document.createEvent('KeyboardEvent');
-    // Send key '13' (= enter)
-    ev.initKeyboardEvent(
-        'keypress', true, true, window, false, false, false, false, 80, 0);
-    document.body.dispatchEvent(ev);
+    let sendKey = new KeyboardEvent('keydown', { key: 'P' }); 
+    document.querySelectorAll('.mat-select')[1].dispatchEvent(sendKey);
+    sendKey = new KeyboardEvent('keydown', { key: 'u' }); 
+    document.querySelectorAll('.mat-select')[1].dispatchEvent(sendKey);
+
+    // document.forms[0].submit();
+
+    // var aTags = document.getElementsByTagName("button");
+    // var searchText = "Search";
+    // var found = false;
+    // for (var i = 0; i < aTags.length; i++) {
+    //     if (aTags[i].textContent == searchText) {
+    //         aTags[i].submit();
+
+    //         // let sendKey = new KeyboardEvent('keydown', { key: 'Enter' }); 
+    //         // aTags[i].dispatchEvent(sendKey);
+            
+    //         // aTags[i].click();
+    //         console.log('Search clicked at ' + new Date().toLocaleString().replace(',','')); 
+    //         break;
+    //     }
+    // }
+    // document.querySelectorAll('.pin-search-btn')[0].focus();
+    // document.querySelectorAll('.pin-search-btn')[0].click();
+    
 
     // document.querySelectorAll('.mat-select')[1].click();
     // var dropdowns = document.querySelectorAll('.mat-select');
@@ -167,7 +200,7 @@ function sleep(milliseconds) {
     } while (currentDate - date < milliseconds);
 }
 
-// selectStateAndDistrict();
+selectStateAndDistrict();
 
 // for (var j = 0; j < 3; j++) {
 //     console.log(j + ' : Trying at ' + new Date().toLocaleString().replace(',',''));
@@ -177,6 +210,6 @@ function sleep(milliseconds) {
 
 // findSlotAvailableButton();
 
-findSlotAvailableButtonRecursive();
+// findSlotAvailableButtonRecursive();
 
 // playSound();
