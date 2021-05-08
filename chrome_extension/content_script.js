@@ -56,10 +56,14 @@ function findSlotAvailableButtonRecursive() {
 
         var buttons = document.getElementsByClassName("pin-search-btn");
         buttons[0].click();
-        console.log(max + ' : Search button clicked at ' + new Date().toLocaleString().replace(',',''));   
-        setTimeout(function(){ click18_button(); }, 3000);
+        console.log(max + ' : Search button clicked at ' + new Date().toLocaleString().replace(',',''));  
+        sleep(3000);
+        click18_button(); 
+        // setTimeout(function(){ click18_button(); }, 3000);
 
-        setTimeout(function(){ getRowCount(); }, 500);
+        sleep(500);
+        getRowCount();
+        // setTimeout(function(){ getRowCount(); }, 500);
         if(slots_found === true){
             break;
         }
