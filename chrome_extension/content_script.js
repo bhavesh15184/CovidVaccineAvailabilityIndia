@@ -122,23 +122,23 @@ function selectStateAndDistrict(){
     sendKey = new KeyboardEvent('keydown', { key: 'u' }); 
     document.querySelectorAll('.mat-select')[1].dispatchEvent(sendKey);
 
+    sleep(2000);
     // document.forms[0].submit();
 
-    // var aTags = document.getElementsByTagName("button");
-    // var searchText = "Search";
-    // var found = false;
-    // for (var i = 0; i < aTags.length; i++) {
-    //     if (aTags[i].textContent == searchText) {
-    //         aTags[i].submit();
-
-    //         // let sendKey = new KeyboardEvent('keydown', { key: 'Enter' }); 
-    //         // aTags[i].dispatchEvent(sendKey);
+    var aTags = document.getElementsByTagName("button");
+    var searchText = "Search";
+    var found = false;
+    for (var i = 0; i < aTags.length; i++) {
+        if (aTags[i].textContent == searchText) {
             
-    //         // aTags[i].click();
-    //         console.log('Search clicked at ' + new Date().toLocaleString().replace(',','')); 
-    //         break;
-    //     }
-    // }
+            // let sendKey = new KeyboardEvent('keydown', { key: 'Enter' }); 
+            // aTags[i].dispatchEvent(sendKey);
+            
+            aTags[i].click();
+            console.log('Search clicked at ' + new Date().toLocaleString().replace(',','')); 
+            break;
+        }
+    }
     // document.querySelectorAll('.pin-search-btn')[0].focus();
     // document.querySelectorAll('.pin-search-btn')[0].click();
     
