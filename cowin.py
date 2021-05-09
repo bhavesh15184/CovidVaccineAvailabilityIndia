@@ -3,13 +3,16 @@ import json
 import datetime
 import csv
 from requests.exceptions import HTTPError
+from playsound import playsound
+import os
+
 
 # ///////////////      CONFIGURATIONS     //////////////////////////////////
 OUTPUT_FILE = 'availibility.csv'
-INPUT_PINCODE_FILE = 'pincodes.csv'
+INPUT_PINCODE_FILE = 'pincode_small.csv'
 
 BASE_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode={}&date={}"
-DAYS_TO_CHECK = 7
+DAYS_TO_CHECK = 2
 AGE = 37
 # //////////////////////////////////////////////////////////////////////////
 
@@ -68,6 +71,8 @@ def getAvailibilityForPincode(PIN_CODE, slots):
                                     number_of_available = number_of_available + 1
     
     if number_of_available > 0:
+        file = "beep.mp3"
+        os.system("mpg123 " + file)
         print("AVAILABLE SLOTS FOR PIN_CODE ",PIN_CODE," ARE: ",number_of_available)
 
     
@@ -80,4 +85,5 @@ def writeSlotsToCSV(slots):
             writer.writerow([s.pincode, s.date, s.center, s.block, s.fee_type, s.available_capacity, s.vaccine])
 
 if __name__ == '__main__':
-    getAvailibilityForRangePinCodes()
+    for x in range(100):
+        getAvailibilityForRangePinCodes()
